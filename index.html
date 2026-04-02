@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ADINOR — Herramientas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&family=Cormorant:ital,wght@0,300;1,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #E5E5E3;
+      --ink:       #111111;
+      --ink-mid:   #555550;
+      --ink-light: #999993;
+      --rule:      rgba(0,0,0,0.11);
+      --hover-bg:  rgba(0,0,0,0.04);
+      --pad-x:     clamp(2rem, 6vw, 5rem);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ══════════════════════════════════════════
+       HERO — 3 columnas explícitas
+       Col 1: tagline
+       Col 2: logo arriba, espacio gris abajo
+       Col 3: tres tiles verticales
+    ══════════════════════════════════════════ */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.6fr 1.6fr;
+      grid-template-rows: 1fr;
+      grid-template-areas: "tagline logo tiles";
+      height: clamp(260px, 42vh, 440px);
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeIn 1s ease 0.1s forwards;
+    }
+
+    /* Col 1 */
+    .hero-tagline-col {
+      grid-area: tagline;
+      display: flex;
+      align-items: flex-end;
+      padding: clamp(1.4rem, 3vh, 2.2rem) var(--pad-x);
+    }
+
+    .hero-tagline {
+      font-weight: 200;
+      font-size: clamp(1.6rem, 3.8vw, 3rem);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      padding-bottom: clamp(1rem, 2vh, 1.8rem);
+    }
+
+    /* Col 2 */
+    .hero-logo-col {
+      grid-area: logo;
+      display: flex;
+      align-items: flex-start;
+      padding: clamp(1.2rem, 2.5vh, 2rem) clamp(1rem, 2vw, 2rem);
+    }
+
+    .logo-img {
+      height: clamp(52px, 7vh, 88px);
+      width: auto;
+      display: block;
+    }
+
+    /* Col 3 */
+    .hero-tiles {
+      grid-area: tiles;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-rows: 1fr;
+      gap: 3px;
+      overflow: hidden;
+    }
+
+    .tile { overflow: hidden; background: #c5c4c1; }
+    .tile img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .tile:hover img { transform: scale(1.06); }
+
+    /* ══════════════════════════════════════════
+       SEPARADOR
+    ══════════════════════════════════════════ */
+    .divider {
+      height: 1px; background: var(--rule);
+      margin: 0 var(--pad-x);
+      opacity: 0; animation: fadeIn 0.6s ease 0.7s forwards;
+    }
+
+    /* ══════════════════════════════════════════
+       LISTA
+    ══════════════════════════════════════════ */
+    main { flex: 1; padding: 0 var(--pad-x); }
+    .tool-list { list-style: none; }
+
+    .tool-item {
+      border-bottom: 1px solid var(--rule);
+      opacity: 0; transform: translateY(16px);
+    }
+    .tool-item:nth-child(1) { animation: fadeUp 0.65s cubic-bezier(0.16,1,0.3,1) 0.85s forwards; }
+    .tool-item:nth-child(2) { animation: fadeUp 0.65s cubic-bezier(0.16,1,0.3,1) 0.95s forwards; }
+    .tool-item:nth-child(3) { animation: fadeUp 0.65s cubic-bezier(0.16,1,0.3,1) 1.05s forwards; }
+    .tool-item:nth-child(4) { animation: fadeUp 0.65s cubic-bezier(0.16,1,0.3,1) 1.15s forwards; }
+    .tool-item:nth-child(5) { animation: fadeUp 0.65s cubic-bezier(0.16,1,0.3,1) 1.25s forwards; }
+    .tool-item:nth-child(6) { animation: fadeUp 0.65s cubic-bezier(0.16,1,0.3,1) 1.35s forwards; }
+    .tool-item:nth-child(7) { animation: fadeUp 0.65s cubic-bezier(0.16,1,0.3,1) 1.45s forwards; }
+    .tool-item:nth-child(8) { animation: fadeUp 0.65s cubic-bezier(0.16,1,0.3,1) 1.55s forwards; }
+
+    .tool-link {
+      display: grid;
+      grid-template-columns: 3.5rem 1fr auto;
+      align-items: center; gap: 1rem;
+      padding: clamp(1rem, 2vw, 1.5rem) 0.8rem;
+      margin: 0 -0.8rem;
+      text-decoration: none; color: inherit;
+      border-radius: 3px;
+      transition: background 0.22s ease;
+    }
+    .tool-link:hover { background: var(--hover-bg); }
+    .tool-link:hover .tool-name { letter-spacing: 0.22em; }
+    .tool-link:hover .tool-arrow { transform: translateX(6px); opacity: 1; }
+
+    .tool-num {
+      font-size: 0.65rem; font-weight: 400;
+      color: var(--ink-light); letter-spacing: 0.08em;
+      align-self: flex-start; padding-top: 3px;
+    }
+    .tool-body { display: flex; flex-direction: column; gap: 0.2rem; }
+    .tool-name {
+      font-weight: 400;
+      font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+      letter-spacing: 0.16em; text-transform: uppercase;
+      transition: letter-spacing 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+    .tool-desc {
+      font-family: 'Cormorant', serif;
+      font-style: italic; font-weight: 300;
+      font-size: clamp(0.78rem, 1.2vw, 0.9rem);
+      color: var(--ink-mid); line-height: 1.4;
+    }
+    .tool-arrow {
+      font-size: 1rem; color: var(--ink-light);
+      opacity: 0.4; flex-shrink: 0;
+      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.22s ease;
+    }
+
+    /* ══════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════ */
+    footer {
+      padding: clamp(1.2rem, 3vw, 2.5rem) var(--pad-x);
+      opacity: 0; animation: fadeIn 0.8s ease 1.6s forwards;
+    }
+    .footer-inner {
+      border-top: 1px solid var(--rule);
+      padding-top: 1.2rem;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 0.8rem;
+    }
+    .footer-brand {
+      font-weight: 500; font-size: 0.65rem;
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--ink-light);
+    }
+    .footer-info {
+      font-size: 0.65rem; font-weight: 300;
+      color: var(--ink-light); letter-spacing: 0.04em;
+      text-align: right; line-height: 1.8;
+    }
+    .footer-info a { color: var(--ink-mid); text-decoration: none; }
+    .footer-info a:hover { color: var(--ink); }
+
+    /* ══════════════════════════════════════════
+       KEYFRAMES
+    ══════════════════════════════════════════ */
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════ */
+    @media (max-width: 700px) {
+      .hero {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 1fr;
+        grid-template-areas: "logo logo" "tiles tiles";
+        height: auto;
+      }
+      .hero-tagline-col { display: none; }
+      .hero-logo-col { padding: 1.2rem var(--pad-x); }
+      .hero-tiles { height: 40vw; min-height: 160px; }
+      .hero-tagline { font-size: clamp(1.4rem, 6vw, 2rem); }
+    }
+    @media (max-width: 420px) {
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .footer-info { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════ HERO ══════ -->
+  <section class="hero">
+
+    <!-- Col 1: tagline -->
+    <div class="hero-tagline-col">
+      <h1 class="hero-tagline">
+        Configuradores<br>y herramientas<br>de fabricación
+      </h1>
+    </div>
+
+    <!-- Col 2: logo -->
+    <div class="hero-logo-col">
+      <img class="logo-img"
+           src="https://jdurba.github.io/General/img/LOGO_2025_Negro.svg"
+           alt="ADINOR" />
+    </div>
+
+    <!-- Col 3: tres tiles verticales -->
+    <div class="hero-tiles">
+      <div class="tile"><img src="https://jdurba.github.io/General/img/PA.jpg"            alt="Puertas PA"></div>
+      <div class="tile"><img src="https://jdurba.github.io/General/img/Rasomuro.jpg"      alt="Rasomuro"></div>
+      <div class="tile"><img src="https://jdurba.github.io/General/img/Iluminacion.jpg"   alt="Iluminación"></div>
+      <div class="tile"><img src="https://jdurba.github.io/General/img/Vitrina2.jpg"      alt="Vitrina"></div>
+    </div>
+
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════ LISTA
+       Para añadir: copia un <li>, cambia href, nombre, descripción y número.
+  ══════ -->
+  <main>
+    <ul class="tool-list">
+
+      <li class="tool-item">
+        <a class="tool-link" href="https://jdurba.github.io/SistemaPA/PAMontada.html">
+          <span class="tool-num">01</span>
+          <span class="tool-body">
+            <span class="tool-name">PA Montada con vidrio</span>
+            <span class="tool-desc">Puertas y fijos, configurador de precios y hoja de fabricación</span>
+          </span>
+          <span class="tool-arrow">→</span>
+        </a>
+      </li>
+
+      <li class="tool-item">
+        <a class="tool-link" href="https://jdurba.github.io/SistemaPA/DivisionesPA.html">
+          <span class="tool-num">02</span>
+          <span class="tool-body">
+            <span class="tool-name">Divisiones PA</span>
+            <span class="tool-desc">Configurador válido para elementos PA, no usar divisiones reales en abatibles</span>
+          </span>
+          <span class="tool-arrow">→</span>
+        </a>
+      </li>
+
+      <li class="tool-item">
+        <a class="tool-link" href="https://jdurba.github.io/Vitrinas/AdinorConfiguradorVitrinas.html">
+          <span class="tool-num">03</span>
+          <span class="tool-body">
+            <span class="tool-name">Vitrinas</span>
+            <span class="tool-desc">Configurador precios y hoja de fabricación</span>
+          </span>
+          <span class="tool-arrow">→</span>
+        </a>
+      </li>
+
+
+
+
+    </ul>
+  </main>
+
+  <!-- ══════ FOOTER ══════ -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-brand">Adinor</span>
+      <div class="footer-info">
+        Av. Gijón, 90–92 · 47009 Valladolid ·
+        <a href="/cdn-cgi/l/email-protection#dcacb9b8b5b8b3af9cbdb8b5b2b3aeafb0f2b9af"><span class="__cf_email__" data-cfemail="d1a1b4b5b8b5bea291b0b5b8bfbea3a2bdffb4a2">[email&#160;protected]</span>
