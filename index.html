@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ADINOR — Herramientas</title>
+  <title>ADINOR — Configuradores</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&family=Cormorant:ital,wght@0,300;1,300&display=swap" rel="stylesheet" />
@@ -12,7 +12,7 @@
       --bg:        #E5E5E3;
       --ink:       #111111;
       --ink-mid:   #555550;
-      --ink-light: #999993;
+      --ink-light: #727270;       /*#999993;*/
       --rule:      rgba(0,0,0,0.11);
       --hover-bg:  rgba(0,0,0,0.04);
       --pad-x:     clamp(2rem, 6vw, 5rem);
@@ -139,7 +139,7 @@
     .tool-link:hover .tool-arrow { transform: translateX(6px); opacity: 1; }
 
     .tool-num {
-      font-size: 0.65rem; font-weight: 400;
+      font-size: 0.8rem; font-weight: 400;
       color: var(--ink-light); letter-spacing: 0.08em;
       align-self: flex-start; padding-top: 3px;
     }
@@ -153,7 +153,7 @@
     .tool-desc {
       font-family: 'Cormorant', serif;
       font-style: italic; font-weight: 300;
-      font-size: clamp(0.78rem, 1.2vw, 0.9rem);
+      font-size: clamp(0.9rem, 1.4vw, 1rem);
       color: var(--ink-mid); line-height: 1.4;
     }
     .tool-arrow {
@@ -182,7 +182,7 @@
     }
     .footer-info {
       font-size: 0.65rem; font-weight: 300;
-      color: var(--ink-light); letter-spacing: 0.04em;
+      color: var(--ink-light); letter-spacing: 0.02em;
       text-align: right; line-height: 1.8;
     }
     .footer-info a { color: var(--ink-mid); text-decoration: none; }
@@ -285,6 +285,16 @@
         </a>
       </li>
 
+      <li class="tool-item">
+        <a class="tool-link" href="#">
+          <span class="tool-num">04</span>
+          <span class="tool-body">
+            <span class="tool-name">Rasomuro</span>
+            <span class="tool-desc">Configurador precios y hoja de fabricación</span>
+          </span>
+          <span class="tool-arrow">→</span>
+        </a>
+      </li>
 
 
 
@@ -292,9 +302,13 @@
   </main>
 
   <!-- ══════ FOOTER ══════ -->
-  <footer>
-    <div class="footer-inner">
-      <span class="footer-brand">Adinor</span>
-      <div class="footer-info">
-        Av. Gijón, 90–92 · 47009 Valladolid ·
-        <a href="/cdn-cgi/l/email-protection#dcacb9b8b5b8b3af9cbdb8b5b2b3aeafb0f2b9af"><span class="__cf_email__" data-cfemail="d1a1b4b5b8b5bea291b0b5b8bfbea3a2bdffb4a2">[email&#160;protected]</span>
+ <footer>
+  <div class="footer-inner">
+    <span class="footer-brand">Adinor, S.L.</span>
+    <div class="footer-info">
+      Av. Gijón, 90–92 · 47009 Valladolid ·
+      <a href="mailto:pedidos@adinorsl.es">pedidos@adinorsl.es</a> ·
+      <a href="https://www.adinor.info" target="_blank">WWW.adinor.info</a>
+    </div>
+  </div>
+</footer>
