@@ -12,10 +12,25 @@
       --bg:        #E5E5E3;
       --ink:       #111111;
       --ink-mid:   #555550;
-      --ink-light: #727270;       /*#999993;*/
+      --ink-light: #727270;
       --rule:      rgba(0,0,0,0.11);
       --hover-bg:  rgba(0,0,0,0.04);
       --pad-x:     clamp(2rem, 6vw, 5rem);
+
+      /* Header oscuro de la vista B (sub-menú PA) */
+      --header-dark:   #2D3A4B;
+      --header-ink:    #FFFFFF;
+      --header-accent: #6B7FB8;
+
+      /* ─── Paleta de estados de tarjeta ───
+         Neutra, reutilizable en TODOS los configuradores.
+         Pensada para vivir sobre --bg (#E5E5E3). */
+      --card-bg-idle:      #FFFFFF;            /* En reposo */
+      --card-bg-hover:     #F0F0EE;            /* Ratón encima */
+      --card-bg-selected:  #D4D4D3;            /* Elegida */
+      --card-bd-idle:      rgba(0,0,0,0.18);
+      --card-bd-hover:     #3a3a3a;
+      --card-bd-selected:  #111111;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,11 +47,18 @@
     }
 
     /* ══════════════════════════════════════════
-       HERO — 3 columnas explícitas
-       Col 1: tagline
-       Col 2: logo arriba, espacio gris abajo
-       Col 3: tres tiles verticales
+       VISTAS — A (familias) y B (sub-menú PA)
+       Solo una visible a la vez.
     ══════════════════════════════════════════ */
+    .vista { display: none; flex-direction: column; flex: 1; }
+    .vista.active { display: flex; }
+
+    /* ══════════════════════════════════════════
+       ════════  VISTA A — Familias  ════════
+       (sin cambios respecto al original)
+    ══════════════════════════════════════════ */
+
+    /* HERO — 3 columnas explícitas */
     .hero {
       display: grid;
       grid-template-columns: 1.2fr 0.6fr 1.6fr;
@@ -47,15 +69,12 @@
       opacity: 0;
       animation: fadeIn 1s ease 0.1s forwards;
     }
-
-    /* Col 1 */
     .hero-tagline-col {
       grid-area: tagline;
       display: flex;
       align-items: flex-end;
       padding: clamp(1.4rem, 3vh, 2.2rem) var(--pad-x);
     }
-
     .hero-tagline {
       font-weight: 200;
       font-size: clamp(1.6rem, 3.8vw, 3rem);
@@ -63,22 +82,17 @@
       letter-spacing: -0.01em;
       padding-bottom: clamp(1rem, 2vh, 1.8rem);
     }
-
-    /* Col 2 */
     .hero-logo-col {
       grid-area: logo;
       display: flex;
       align-items: flex-start;
       padding: clamp(1.2rem, 2.5vh, 2rem) clamp(1rem, 2vw, 2rem);
     }
-
     .logo-img {
       height: clamp(52px, 7vh, 88px);
       width: auto;
       display: block;
     }
-
-    /* Col 3 */
     .hero-tiles {
       grid-area: tiles;
       display: grid;
@@ -87,7 +101,6 @@
       gap: 3px;
       overflow: hidden;
     }
-
     .tile { overflow: hidden; background: #c5c4c1; }
     .tile img {
       width: 100%; height: 100%;
@@ -96,21 +109,15 @@
     }
     .tile:hover img { transform: scale(1.06); }
 
-    /* ══════════════════════════════════════════
-       SEPARADOR
-    ══════════════════════════════════════════ */
     .divider {
       height: 1px; background: var(--rule);
       margin: 0 var(--pad-x);
       opacity: 0; animation: fadeIn 0.6s ease 0.7s forwards;
     }
 
-    /* ══════════════════════════════════════════
-       LISTA
-    ══════════════════════════════════════════ */
+    /* LISTA */
     main { flex: 1; padding: 0 var(--pad-x); }
     .tool-list { list-style: none; }
-
     .tool-item {
       border-bottom: 1px solid var(--rule);
       opacity: 0; transform: translateY(16px);
@@ -133,11 +140,16 @@
       text-decoration: none; color: inherit;
       border-radius: 3px;
       transition: background 0.22s ease;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: calc(100% + 1.6rem);
+      font-family: inherit;
+      text-align: left;
     }
     .tool-link:hover { background: var(--hover-bg); }
     .tool-link:hover .tool-name { letter-spacing: 0.22em; }
     .tool-link:hover .tool-arrow { transform: translateX(6px); opacity: 1; }
-
     .tool-num {
       font-size: 0.8rem; font-weight: 400;
       color: var(--ink-light); letter-spacing: 0.08em;
@@ -162,9 +174,7 @@
       transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.22s ease;
     }
 
-    /* ══════════════════════════════════════════
-       FOOTER
-    ══════════════════════════════════════════ */
+    /* FOOTER */
     footer {
       padding: clamp(1.2rem, 3vw, 2.5rem) var(--pad-x);
       opacity: 0; animation: fadeIn 0.8s ease 1.6s forwards;
@@ -189,6 +199,233 @@
     .footer-info a:hover { color: var(--ink); }
 
     /* ══════════════════════════════════════════
+       ════════  VISTA B — Sub-menú PA  ════════
+       Header oscuro compacto + mapa de 5 cards
+    ══════════════════════════════════════════ */
+
+    .vista-b-header {
+      background: var(--header-dark);
+      color: var(--header-ink);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.3rem var(--pad-x);   /* ← menos padding vertical */
+      min-height: 72px;
+    }
+
+    .vista-b-logo {
+      height: 58px;                    /* ← más grande (era 50px) */
+      width: auto;
+      display: block;
+    }
+
+    .vista-b-title {
+      text-align: center;
+      font-weight: 400;
+      font-size: clamp(1.25rem, 2.2vw, 1.6rem);  /* ← rango más alto */
+      letter-spacing: 0.04em;
+      color: var(--header-ink);
+      opacity: 0.92;
+    }
+
+    .vista-b-back {
+      background: var(--header-accent);
+      color: #fff;
+      border: none;
+      padding: 0.55rem 1.1rem;
+      font-family: inherit;
+      font-weight: 400;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.22s ease, transform 0.22s ease;
+      white-space: nowrap;
+    }
+    .vista-b-back:hover {
+      background: #5a6ea8;
+      transform: translateX(-2px);
+    }
+
+    /* Cuerpo de la vista B */
+    .vista-b-body {
+      flex: 1;
+      padding: clamp(1.5rem, 3vw, 2.5rem) var(--pad-x);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(1.2rem, 2.5vw, 2rem);
+    }
+    .vista-b-intro {
+      font-weight: 200;
+      font-size: clamp(1.3rem, 2.6vw, 1.9rem);
+      line-height: 1.2;
+      letter-spacing: -0.005em;
+      max-width: 60ch;
+    }
+    .vista-b-intro em {
+      font-family: 'Cormorant', serif;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--ink-mid);
+    }
+
+    /* Dos grupos: frentes completos / elementos independientes */
+    .grupos-pa {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: clamp(2.5rem, 5vw, 5rem);
+    }
+    .grupo-pa {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .grupo-pa-titulo {
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      padding-bottom: 0.85rem;
+      border-bottom: 1.5px solid rgba(0,0,0,0.45);
+    }
+    .grupo-pa-cards {
+      display: grid;
+      gap: clamp(0.6rem, 1.2vw, 1rem);
+    }
+    .grupo-pa[data-grupo="frentes"] .grupo-pa-cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .grupo-pa[data-grupo="independientes"] .grupo-pa-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Cards (cada opción) */
+    .pa-card {
+      position: relative;
+      background: var(--card-bg-idle);
+      border: 2px solid var(--card-bd-idle);
+      border-radius: 6px;
+      padding: 0.9rem 0.8rem 0.7rem;
+      cursor: pointer;
+      transition: border-color 0.22s ease,
+                  transform 0.22s ease,
+                  box-shadow 0.28s ease,
+                  background 0.22s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .pa-card:hover {
+      background: var(--card-bg-hover);
+      border-color: var(--card-bd-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.10),
+                  0 2px 6px rgba(0,0,0,0.05);
+    }
+    .pa-card.disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+    .pa-card.disabled:hover {
+      background: var(--card-bg-idle);
+      transform: none;
+      box-shadow: none;
+      border-color: var(--card-bd-idle);
+    }
+
+    .pa-card.selected {
+      background: var(--card-bg-selected);
+      border-color: var(--card-bd-selected);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.18),
+                  0 3px 10px rgba(0,0,0,0.08),
+                  0 0 0 1px var(--card-bd-selected) inset;
+    }
+    .pa-card.selected:hover {
+      background: var(--card-bg-selected);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.20),
+                  0 4px 12px rgba(0,0,0,0.09),
+                  0 0 0 1px var(--card-bd-selected) inset;
+    }
+    .pa-card input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .pa-card-img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: contain;
+      display: block;
+    }
+    .pa-card-name {
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: center;
+      color: var(--ink);
+    }
+    .pa-card-tag {
+      position: absolute;
+      top: 0.55rem;
+      right: 0.6rem;
+      font-size: 0.58rem;
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      background: var(--bg);
+      padding: 0.2rem 0.45rem;
+      border-radius: 2px;
+    }
+
+
+    /* Pie de la vista B */
+    .vista-b-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: clamp(0.8rem, 2vh, 1.5rem);
+      border-top: 1.5px solid rgba(0,0,0,0.45);
+      margin-top: clamp(0.5rem, 1.5vh, 1rem);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .vista-b-hint {
+      font-family: 'Cormorant', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--ink-mid);
+    }
+    .btn-siguiente {
+      background: #4a4a4a;                    /* Estado 2: con selección, gris oscuro */
+      color: #fff;
+      border: none;
+      padding: 0.85rem 1.8rem;
+      font-family: inherit;
+      font-weight: 400;
+      font-size: 0.88rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.22s ease, transform 0.22s ease;
+    }
+    .btn-siguiente:hover:not(:disabled) {
+      background: #111111;                    /* Estado 3: hover con selección, negro tinta */
+      transform: translateX(2px);
+    }
+    .btn-siguiente:disabled {
+      background: #b8b8b6;                    /* Estado 1: sin selección, gris claro */
+      opacity: 1;
+      cursor: not-allowed;
+    }
+
+    /* ══════════════════════════════════════════
        KEYFRAMES
     ══════════════════════════════════════════ */
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
@@ -197,6 +434,14 @@
     /* ══════════════════════════════════════════
        RESPONSIVE
     ══════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .grupos-pa {
+        grid-template-columns: 1fr;
+      }
+      .grupo-pa[data-grupo="independientes"] .grupo-pa-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
     @media (max-width: 700px) {
       .hero {
         grid-template-columns: 1fr 1fr;
@@ -208,107 +453,366 @@
       .hero-logo-col { padding: 1.2rem var(--pad-x); }
       .hero-tiles { height: 40vw; min-height: 160px; }
       .hero-tagline { font-size: clamp(1.4rem, 6vw, 2rem); }
+
+      .vista-b-header {
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto;
+      }
+      .vista-b-title {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        text-align: left;
+      }
+      .grupo-pa[data-grupo="frentes"] .grupo-pa-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
     @media (max-width: 420px) {
       .footer-inner { flex-direction: column; align-items: flex-start; }
       .footer-info { text-align: left; }
+      .grupo-pa[data-grupo="frentes"] .grupo-pa-cards,
+      .grupo-pa[data-grupo="independientes"] .grupo-pa-cards {
+        grid-template-columns: 1fr;
+      }
+      .vista-b-footer { flex-direction: column; align-items: stretch; }
+      .btn-siguiente { width: 100%; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ══════ HERO ══════ -->
-  <section class="hero">
+  <!-- ══════════════════════════════════════════════════════════════
+       VISTA A — Listado de familias
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="vista active" id="vistaA">
 
-    <!-- Col 1: tagline -->
-    <div class="hero-tagline-col">
-      <h1 class="hero-tagline">
-        Configuradores<br>y herramientas<br>de fabricación
-      </h1>
-    </div>
+    <!-- HERO -->
+    <section class="hero">
 
-    <!-- Col 2: logo -->
-    <div class="hero-logo-col">
-      <img class="logo-img"
-           src="https://jdurba.github.io/General/img/LOGO_2025_Negro.svg"
-           alt="ADINOR" />
-    </div>
+      <div class="hero-tagline-col">
+        <h1 class="hero-tagline">
+          Configuradores<br>y herramientas<br>de fabricación
+        </h1>
+      </div>
 
-    <!-- Col 3: tres tiles verticales -->
-    <div class="hero-tiles">
-      <div class="tile"><img src="https://jdurba.github.io/General/img/PA.jpg"            alt="Puertas PA"></div>
-      <div class="tile"><img src="https://jdurba.github.io/General/img/Rasomuro.jpg"      alt="Rasomuro"></div>
-      <div class="tile"><img src="https://jdurba.github.io/General/img/Iluminacion.jpg"   alt="Iluminación"></div>
-      <div class="tile"><img src="https://jdurba.github.io/General/img/Vitrina2.jpg"      alt="Vitrina"></div>
-    </div>
+      <div class="hero-logo-col">
+        <img class="logo-img"
+             src="https://jdurba.github.io/General/img/LOGO_2025_Negro.svg"
+             alt="ADINOR" />
+      </div>
 
-  </section>
+      <div class="hero-tiles">
+        <div class="tile"><img src="https://jdurba.github.io/General/img/PA.jpg"          alt="Puertas PA"></div>
+        <div class="tile"><img src="https://jdurba.github.io/General/img/Rasomuro.jpg"    alt="Rasomuro"></div>
+        <div class="tile"><img src="https://jdurba.github.io/General/img/Iluminacion.jpg" alt="Iluminación"></div>
+        <div class="tile"><img src="https://jdurba.github.io/General/img/Vitrina2.jpg"    alt="Vitrina"></div>
+      </div>
 
-  <div class="divider"></div>
+    </section>
 
-  <!-- ══════ LISTA
-       Para añadir: copia un <li>, cambia href, nombre, descripción y número.
-  ══════ -->
-  <main>
-    <ul class="tool-list">
+    <div class="divider"></div>
 
-      <li class="tool-item">
-        <a class="tool-link" href="https://jdurba.github.io/SistemaPA/PAMontada.html">
-          <span class="tool-num">01</span>
-          <span class="tool-body">
-            <span class="tool-name">PA Montada con vidrio</span>
-            <span class="tool-desc">Puertas y fijos, configurador de precios y hoja de fabricación</span>
-          </span>
-          <span class="tool-arrow">→</span>
-        </a>
-      </li>
+    <!-- LISTA -->
+    <main>
+      <ul class="tool-list">
 
-      <li class="tool-item">
-        <a class="tool-link" href="https://jdurba.github.io/SistemaPA/DivisionesPA.html">
-          <span class="tool-num">02</span>
-          <span class="tool-body">
-            <span class="tool-name">Divisiones PA</span>
-            <span class="tool-desc">Configurador válido para elementos PA, no usar divisiones reales en abatibles</span>
-          </span>
-          <span class="tool-arrow">→</span>
-        </a>
-      </li>
+        <li class="tool-item">
+          <button type="button" class="tool-link" onclick="abrirSubMenuPA()">
+            <span class="tool-num">01</span>
+            <span class="tool-body">
+              <span class="tool-name">PA Montada con vidrio</span>
+              <span class="tool-desc">Puertas y fijos, configurador de precios y hoja de fabricación</span>
+            </span>
+            <span class="tool-arrow">→</span>
+          </button>
+        </li>
 
-      <li class="tool-item">
-        <a class="tool-link" href="https://jdurba.github.io/Vitrinas/AdinorConfiguradorVitrinas.html">
-          <span class="tool-num">03</span>
-          <span class="tool-body">
-            <span class="tool-name">Vitrinas</span>
-            <span class="tool-desc">Configurador precios y hoja de fabricación</span>
-          </span>
-          <span class="tool-arrow">→</span>
-        </a>
-      </li>
+        <li class="tool-item">
+          <a class="tool-link" href="https://jdurba.github.io/SistemaPA/DivisionesPA.html">
+            <span class="tool-num">02</span>
+            <span class="tool-body">
+              <span class="tool-name">Divisiones PA</span>
+              <span class="tool-desc">Configurador válido para elementos PA, no usar divisiones reales en abatibles</span>
+            </span>
+            <span class="tool-arrow">→</span>
+          </a>
+        </li>
 
-      <li class="tool-item">
-        <a class="tool-link" href="#">
-          <span class="tool-num">04</span>
-          <span class="tool-body">
-            <span class="tool-name">Rasomuro</span>
-            <span class="tool-desc">Configurador precios y hoja de fabricación</span>
-          </span>
-          <span class="tool-arrow">→</span>
-        </a>
-      </li>
+        <li class="tool-item">
+          <a class="tool-link" href="https://jdurba.github.io/Vitrinas/AdinorConfiguradorVitrinas.html">
+            <span class="tool-num">03</span>
+            <span class="tool-body">
+              <span class="tool-name">Vitrinas</span>
+              <span class="tool-desc">Configurador precios y hoja de fabricación</span>
+            </span>
+            <span class="tool-arrow">→</span>
+          </a>
+        </li>
 
+        <li class="tool-item">
+          <a class="tool-link" href="#">
+            <span class="tool-num">04</span>
+            <span class="tool-body">
+              <span class="tool-name">Rasomuro</span>
+              <span class="tool-desc">Configurador precios y hoja de fabricación</span>
+            </span>
+            <span class="tool-arrow">→</span>
+          </a>
+        </li>
 
+      </ul>
+    </main>
 
-    </ul>
-  </main>
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-inner">
+        <span class="footer-brand">Adinor, S.L.</span>
+        <div class="footer-info">
+          Av. Gijón, 90–92 · 47009 Valladolid ·
+          <a href="mailto:pedidos@adinorsl.es">pedidos@adinorsl.es</a> ·
+          <a href="https://www.adinor.info" target="_blank">WWW.adinor.info</a>
+        </div>
+      </div>
+    </footer>
 
-  <!-- ══════ FOOTER ══════ -->
- <footer>
-  <div class="footer-inner">
-    <span class="footer-brand">Adinor, S.L.</span>
-    <div class="footer-info">
-      Av. Gijón, 90–92 · 47009 Valladolid ·
-      <a href="mailto:pedidos@adinorsl.es">pedidos@adinorsl.es</a> ·
-      <a href="https://www.adinor.info" target="_blank">WWW.adinor.info</a>
-    </div>
   </div>
-</footer>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       VISTA B — Sub-menú PA (5 sistemas)
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="vista" id="vistaB">
+
+    <!-- Header oscuro compacto -->
+    <header class="vista-b-header">
+      <img class="vista-b-logo"
+           src="https://jdurba.github.io/General/img/LogoAdinorBlanco.png"
+           alt="ADINOR" />
+      <div class="vista-b-title">Sistema PA — Montado con vidrio</div>
+      <button type="button" class="vista-b-back" onclick="volverAlInicio()">← Volver al menú</button>
+    </header>
+
+    <!-- Cuerpo -->
+    <div class="vista-b-body">
+
+      <p class="vista-b-intro">
+        Configuración Modular de Puertas y Fijos<br>
+      </p>
+
+      <div class="grupos-pa">
+
+        <!-- Grupo 1: Frentes completos -->
+        <div class="grupo-pa" data-grupo="frentes">
+          <div class="grupo-pa-titulo">Frentes completos · Instalación en hueco</div>
+          <div class="grupo-pa-cards">
+
+            <label class="pa-card" data-flujo="1">
+              <input type="radio" name="sistemaPA" value="1">
+              <img class="pa-card-img" src="https://raw.githubusercontent.com/Jdurba/SistemaPA/main/img/PuertaCorredera.png" alt="Puerta corredera">
+              <span class="pa-card-name">Puerta corredera</span>
+            </label>
+
+            <label class="pa-card" data-flujo="2">
+              <input type="radio" name="sistemaPA" value="2">
+              <img class="pa-card-img" src="https://raw.githubusercontent.com/Jdurba/SistemaPA/main/img/PuertaAbatible.png" alt="Puerta abatible">
+              <span class="pa-card-name">Puerta abatible</span>
+            </label>
+
+            <label class="pa-card dev" data-flujo="5">
+              <input type="radio" name="sistemaPA" value="5">
+              <img class="pa-card-img" src="https://raw.githubusercontent.com/Jdurba/SistemaPA/main/img/Murete.png" alt="Sobremurete">
+              <span class="pa-card-name">Sobremurete</span>
+            </label>
+
+          </div>
+        </div>
+
+        <!-- Grupo 2: Elementos independientes -->
+        <div class="grupo-pa" data-grupo="independientes">
+          <div class="grupo-pa-titulo">Elementos independientes</div>
+          <div class="grupo-pa-cards">
+
+            <label class="pa-card" data-flujo="3">
+              <input type="radio" name="sistemaPA" value="3">
+              <img class="pa-card-img" src="https://raw.githubusercontent.com/Jdurba/SistemaPA/main/img/SueltoPuerta.png" alt="Corredera independiente">
+              <span class="pa-card-name">Corredera</span>
+            </label>
+
+            <label class="pa-card" data-flujo="4">
+              <input type="radio" name="sistemaPA" value="4">
+              <img class="pa-card-img" src="https://raw.githubusercontent.com/Jdurba/SistemaPA/main/img/SueltoFijo.png" alt="Fijo independiente">
+              <span class="pa-card-name">Fijo</span>
+            </label>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Pie con hint y botón Siguiente -->
+      <div class="vista-b-footer">
+        <span class="vista-b-hint">Selecciona una opción para continuar</span>
+        <button type="button" class="btn-siguiente" id="btnSiguientePA" onclick="lanzarConfigurador()" disabled>
+          Siguiente →
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       JAVASCRIPT
+  ══════════════════════════════════════════════════════════════ -->
+  <script>
+
+    // ⚙️ CONFIGURACIÓN DE ENTORNO ─────────────────────────────────
+    // Cambiar 'local' ↔ 'github' para desarrollo / producción
+    const ENTORNO = 'local'; // 'local' | 'github'
+
+    const RUTAS = {
+      local: {
+        montada:   'PA_montada/PAMontada.html',
+        abatible:  'PA_montada/PAMontAbatible.html'
+      },
+      github: {
+        montada:   'https://jdurba.github.io/SistemaPA/PAMontada.html',
+        abatible:  'https://jdurba.github.io/SistemaPA/PAMontAbatible.html'
+      }
+    };
+    const URLs = RUTAS[ENTORNO];
+
+
+    // ═══════════════════════════════════════════════════════════════
+    // GESTIÓN DE VISTAS A / B
+    // ═══════════════════════════════════════════════════════════════
+
+    const vistaA = document.getElementById('vistaA');
+    const vistaB = document.getElementById('vistaB');
+
+    function mostrarVistaA() {
+      vistaB.classList.remove('active');
+      vistaA.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function mostrarVistaB() {
+      vistaA.classList.remove('active');
+      vistaB.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+
+    // ═══════════════════════════════════════════════════════════════
+    // ABRIR SUB-MENÚ PA (desde tarjeta "01")
+    // ═══════════════════════════════════════════════════════════════
+
+    function abrirSubMenuPA() {
+      mostrarVistaB();
+      // Restaurar selección previa si existe
+      const previo = localStorage.getItem('flujoSeleccionado');
+      if (previo) {
+        const card = document.querySelector(`.pa-card[data-flujo="${previo}"]`);
+        if (card && !card.classList.contains('disabled')) {
+          marcarCard(card);
+        }
+      }
+    }
+
+
+    // ═══════════════════════════════════════════════════════════════
+    // VOLVER AL MENÚ A (con confirmación si hay selección)
+    // ═══════════════════════════════════════════════════════════════
+
+    function volverAlInicio() {
+      const haySeleccion = !!document.querySelector('.pa-card.selected');
+      if (haySeleccion) {
+        const ok = confirm('¿Volver al menú principal?\nSe perderá la selección actual.');
+        if (!ok) return;
+        limpiarSeleccion();
+      }
+      mostrarVistaA();
+    }
+
+
+    // ═══════════════════════════════════════════════════════════════
+    // SELECCIÓN DE CARDS
+    // ═══════════════════════════════════════════════════════════════
+
+    const cards = document.querySelectorAll('.pa-card');
+    const btnSiguiente = document.getElementById('btnSiguientePA');
+
+    cards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.preventDefault(); // evitamos el toggle nativo del radio para controlarlo nosotros
+        if (card.classList.contains('disabled')) return;
+        marcarCard(card);
+      });
+    });
+
+    function marcarCard(card) {
+      cards.forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      const radio = card.querySelector('input[type="radio"]');
+      if (radio) radio.checked = true;
+      btnSiguiente.disabled = false;
+    }
+
+    function limpiarSeleccion() {
+      cards.forEach(c => c.classList.remove('selected'));
+      cards.forEach(c => { const r = c.querySelector('input[type="radio"]'); if (r) r.checked = false; });
+      btnSiguiente.disabled = true;
+      localStorage.removeItem('flujoSeleccionado');
+      localStorage.removeItem('datosFormularios');
+    }
+
+
+    // ═══════════════════════════════════════════════════════════════
+    // LANZAR CONFIGURADOR
+    // ═══════════════════════════════════════════════════════════════
+
+    function lanzarConfigurador() {
+      const seleccionada = document.querySelector('.pa-card.selected');
+      if (!seleccionada) return;
+      const flujoId = seleccionada.dataset.flujo;
+
+      // Casos especiales en desarrollo
+      if (flujoId === '5') {
+        alert('⚠️ Sobremurete: en fase de desarrollo. No válido para pedidos.');
+        return;
+      }
+
+      // Persistir flujo + estructura datosFormularios.form1.imagen
+      // (necesario para que PAMontada y PAMontAbatible la lean tal y como ya esperan)
+      localStorage.setItem('flujoSeleccionado', flujoId);
+      const datosFormularios = { form1: { imagen: flujoId } };
+      localStorage.setItem('datosFormularios', JSON.stringify(datosFormularios));
+
+      // Redirigir según flujo
+      if (flujoId === '2') {
+        window.location.href = URLs.abatible;
+      } else {
+        // 1 (corredera), 3 (suelto-corredera), 4 (suelto-fijo) → PAMontada
+        window.location.href = URLs.montada;
+      }
+    }
+
+
+    // ═══════════════════════════════════════════════════════════════
+    // ENTRADA DIRECTA AL INDEX (al cargar la página)
+    // Si vengo de un configurador con la marca "regresarASubMenuPA",
+    // abro directamente la vista B con la opción previa marcada.
+    // ═══════════════════════════════════════════════════════════════
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const regresar = localStorage.getItem('regresarASubMenuPA');
+      if (regresar === '1') {
+        localStorage.removeItem('regresarASubMenuPA');
+        abrirSubMenuPA();
+      }
+    });
+
+  </script>
+
+</body>
+</html>
