@@ -741,16 +741,18 @@
     // VOLVER AL MENÚ A (con confirmación si hay selección)
     // ═══════════════════════════════════════════════════════════════
 
+
     function volverAlInicio() {
       const haySeleccion = !!document.querySelector('.pa-card.selected');
       if (haySeleccion) {
-        const ok = confirm('¿Volver al menú principal?\nSe perderá la selección actual.');
-        if (!ok) return;
-        limpiarSeleccion();
+        confirmar('¿Volver al menú principal?\nSe perderá la selección actual.', () => {
+          limpiarSeleccion();
+          mostrarVistaA();
+        });
+      } else {
+        mostrarVistaA();
       }
-      mostrarVistaA();
     }
-
 
     // ═══════════════════════════════════════════════════════════════
     // SELECCIÓN DE CARDS
@@ -795,7 +797,7 @@
 
       // Casos especiales en desarrollo
       if (flujoId === '5') {
-        alert('⚠️ Sobremurete: en fase de desarrollo. No válido para pedidos.');
+        aviso('⚠️ Sobremurete: en fase de desarrollo. No válido para pedidos.');
         return;
       }
 
