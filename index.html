@@ -4,9 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ADINOR — Configuradores</title>
+
+    
+  <!-- Configuración para todos HTML,  Mensajes y control de Impresion de página  -->
+  <script>
+    window.ADINOR_CONFIG = { tituloModal: 'Adinor · Configuradores' };
+  </script>
+  <script src="ConfigTodos.js?v=1"></script>
+  <!--  __________________________________________________________________________ -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&family=Cormorant:ital,wght@0,300;1,300&display=swap" rel="stylesheet" />
+  
   <style>
     :root {
       --bg:        #E5E5E3;
@@ -528,7 +538,7 @@
         </li>
 
         <li class="tool-item">
-          <a class="tool-link" href="https://jdurba.github.io/SistemaPA/DivisionesPA.html">
+          <a class="tool-link" id="link-divisiones" href="#">
             <span class="tool-num">02</span>
             <span class="tool-body">
               <span class="tool-name">Divisiones PA</span>
@@ -539,7 +549,7 @@
         </li>
 
         <li class="tool-item">
-          <a class="tool-link" href="https://jdurba.github.io/Vitrinas/AdinorConfiguradorVitrinas.html">
+          <a class="tool-link" id="link-vitrinas" href="#">
             <span class="tool-num">03</span>
             <span class="tool-body">
               <span class="tool-name">Vitrinas</span>
@@ -550,7 +560,7 @@
         </li>
 
         <li class="tool-item">
-          <a class="tool-link" href="#">
+          <a class="tool-link" id="link-rasomuro" href="#">
             <span class="tool-num">04</span>
             <span class="tool-body">
               <span class="tool-name">Rasomuro</span>
@@ -667,20 +677,27 @@
   <script>
 
     // ⚙️ CONFIGURACIÓN DE ENTORNO ─────────────────────────────────
-    // Cambiar 'local' ↔ 'github' para desarrollo / producción
-    const ENTORNO = 'github'; // 'local' | 'github'
+    // Detección automática: GitHub usa URLs absolutas (cada repo es
+    // un sitio independiente); local y host empresarial usan rutas
+    // relativas (estructura de carpetas real).
+    function urlConfigurador(repo, archivo) {
+      return location.hostname.endsWith('github.io')
+        ? `https://jdurba.github.io/${repo}/${archivo}`
+        : `../${repo}/${archivo}`;
+    }
 
-    const RUTAS = {
-      local: {
-        montada:   'PA_montada/PAMontada.html',
-        abatible:  'PA_montada/PAMontAbatible.html'
-      },
-      github: {
-        montada:   'https://jdurba.github.io/SistemaPA/PAMontada.html',
-        abatible:  'https://jdurba.github.io/SistemaPA/PAMontAbatible.html'
-      }
+    const URLs = {
+      montada:    urlConfigurador('SistemaPA', 'PAMontada.html'),
+      abatible:   urlConfigurador('SistemaPA', 'PAMontAbatible.html'),
+      divisiones: urlConfigurador('SistemaPA', 'DivisionesPA.html'),
+      vitrinas:   urlConfigurador('Vitrinas',  'AdinorConfiguradorVitrinas.html')
+      // rasomuro: pendiente — añadir cuando el archivo exista
     };
-    const URLs = RUTAS[ENTORNO];
+
+    // Asignar URLs dinámicas a los enlaces del menú principal
+    document.getElementById('link-divisiones').href = URLs.divisiones;
+    document.getElementById('link-vitrinas').href   = URLs.vitrinas;
+    // link-rasomuro queda con href="#" hasta que el configurador exista
 
 
     // ═══════════════════════════════════════════════════════════════
