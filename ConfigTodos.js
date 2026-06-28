@@ -51,7 +51,7 @@
           <p style="margin:0;font-size:11px;font-weight:500;color:#ffffff;letter-spacing:0.5px;text-transform:uppercase;font-family:'Jost',sans-serif;">${tituloModal}</p>
         </div>
         <div style="padding:22px 22px 18px;background:#F4F0E8;">
-          <p id="_modal-msg" style="margin:0 0 20px;font-size:14px;color:#2D3A4B;line-height:1.6;font-family:'Jost',sans-serif;font-weight:300;"></p>
+          <p id="_modal-msg" style="margin:0 0 20px;font-size:14px;color:#2D3A4B;line-height:1.6;font-family:'Jost',sans-serif;font-weight:300;white-space:pre-line;"></p>
           <div id="_modal-btns" style="display:flex;justify-content:flex-end;gap:10px;"></div>
         </div>
       </div>`;
