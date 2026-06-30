@@ -436,6 +436,175 @@
     }
 
     /* ══════════════════════════════════════════
+       ════════  VISTA C — Sub-menú Rasomuro  ════════
+       Imagen genérica de contexto + 3 opciones en
+       formato lista (número · nombre · descripción).
+       Reutiliza el header oscuro de la vista B.
+    ══════════════════════════════════════════ */
+
+    .vista-c-body {
+      flex: 1;
+      padding: clamp(1.5rem, 3vw, 2.5rem) var(--pad-x);
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: start;
+    }
+
+    /* Columna izquierda: imagen genérica de Rasomuro + intro */
+    .rasomuro-presenta {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .rasomuro-img-frame {
+      border-radius: 6px;
+      overflow: hidden;
+      background: #c5c4c1;
+      aspect-ratio: 4 / 3;
+    }
+    .rasomuro-img-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .rasomuro-intro {
+      font-weight: 200;
+      font-size: clamp(1.2rem, 2.4vw, 1.7rem);
+      line-height: 1.25;
+      letter-spacing: -0.005em;
+    }
+    .rasomuro-intro em {
+      display: block;
+      margin-top: 0.7rem;
+      font-size: 0.7em;
+      font-weight: 300;
+      font-style: normal;
+      color: var(--ink-light);
+    }
+
+    /* Columna derecha: las 3 opciones como tarjetas de lista */
+    .rasomuro-opciones {
+      display: flex;
+      flex-direction: column;
+    }
+    .rasomuro-opcion {
+      position: relative;
+      display: grid;
+      grid-template-columns: 3.5rem 1fr auto;
+      align-items: baseline;
+      gap: 1rem;
+      padding: clamp(1.1rem, 2vw, 1.5rem) 1rem;
+      border: none;
+      border-bottom: 1px solid var(--rule);
+      background: none;
+      width: 100%;
+      font-family: inherit;
+      text-align: left;
+      cursor: pointer;
+      border-radius: 3px;
+      transition: background 0.22s ease;
+    }
+    .rasomuro-opcion:first-child {
+      border-top: 1px solid var(--rule);
+    }
+    .rasomuro-opcion:hover {
+      background: var(--hover-bg);
+    }
+    .rasomuro-opcion:hover .rasomuro-op-arrow {
+      transform: translateX(6px);
+      opacity: 1;
+    }
+    .rasomuro-opcion.selected {
+      background: var(--card-bg-selected);
+    }
+    .rasomuro-opcion.selected .rasomuro-op-arrow {
+      opacity: 1;
+    }
+    .rasomuro-opcion input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .rasomuro-op-cod {
+      font-size: 1.4rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: var(--ink);
+      padding-top: 0px;
+    }
+    .rasomuro-op-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      min-width: 0;
+    }
+    .rasomuro-op-name {
+      font-weight: 400;
+      font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+ 
+    }
+    .rasomuro-op-desc {
+      font-weight: 300;
+      font-size: clamp(0.9rem, 1.5vw, 1rem);
+      color: var(--ink-mid);
+      line-height: 1.5;
+    }
+    .rasomuro-op-desc ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    .rasomuro-op-desc li::before {
+      content: '·';
+      margin-right: 0.5rem;
+      color: var(--ink-light);
+    }
+    .rasomuro-op-arrow {
+      font-size: 1.1rem;
+      color: var(--ink-light);
+      opacity: 0.4;
+      align-self: center;
+      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.22s ease;
+    }
+
+    /* Pie de la vista C (mismo patrón que vista B) */
+    .vista-c-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: clamp(0.8rem, 2vh, 1.5rem) var(--pad-x);
+      border-top: 1.5px solid rgba(0,0,0,0.45);
+      margin: 0 var(--pad-x);
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .vista-c-body {
+        grid-template-columns: 1fr;
+      }
+      .rasomuro-presenta {
+        flex-direction: row;
+        align-items: center;
+      }
+      .rasomuro-img-frame {
+        width: 40%;
+        flex-shrink: 0;
+      }
+    }
+    @media (max-width: 600px) {
+      .rasomuro-presenta { flex-direction: column; }
+      .rasomuro-img-frame { width: 100%; }
+      .vista-c-footer { flex-direction: column; align-items: stretch; }
+      .vista-c-footer .btn-siguiente { width: 100%; }
+    }
+
+    /* ══════════════════════════════════════════
        KEYFRAMES
     ══════════════════════════════════════════ */
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
@@ -560,14 +729,14 @@
         </li>
 
         <li class="tool-item">
-          <a class="tool-link" id="link-rasomuro" href="#">
+          <button type="button" class="tool-link" onclick="abrirSubMenuRasomuro()">
             <span class="tool-num">04</span>
             <span class="tool-body">
-              <span class="tool-name">Rasomuro</span>
+              <span class="tool-name">Rasomuro Minimal 45</span>
               <span class="tool-desc">Configurador precios y hoja de fabricación</span>
             </span>
             <span class="tool-arrow">→</span>
-          </a>
+          </button>
         </li>
 
       </ul>
@@ -672,6 +841,101 @@
 
 
   <!-- ══════════════════════════════════════════════════════════════
+       VISTA C — Sub-menú Rasomuro (3 opciones)
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="vista" id="vistaC">
+
+    <!-- Header oscuro (reutiliza estilos de la vista B) -->
+    <header class="vista-b-header">
+      <img class="vista-b-logo"
+           src="https://jdurba.github.io/General/img/LogoAdinorBlanco.png"
+           alt="ADINOR" />
+      <div class="vista-b-title">Rasomuro — Marcos Minimal 45 mm</div>
+      <button type="button" class="vista-b-back" onclick="volverAlInicioRasomuro()">← Volver al menú</button>
+    </header>
+
+    <!-- Cuerpo: imagen genérica + 3 opciones -->
+    <div class="vista-c-body">
+
+      <div class="rasomuro-presenta">
+        <div class="rasomuro-img-frame">
+          <img src="https://jdurba.github.io/General/img/Rasomuro.jpg" alt="Marco rasomuro">
+        </div>
+        <p class="rasomuro-intro">
+          Marcos rasomuro Minimal de 45&nbsp;mm.
+          <em>Elige el tipo de configuración.</em>
+        </p>
+      </div>
+
+      <div class="rasomuro-opciones" role="radiogroup" aria-label="Tipo de Rasomuro">
+
+        <button type="button" class="rasomuro-opcion" data-flujo="MRE">
+          <input type="radio" name="tipoRasomuro" value="MRE">
+          <span class="rasomuro-op-cod">MRE</span>
+          <span class="rasomuro-op-body">
+            <span class="rasomuro-op-name">Marcos a medida</span>
+            <span class="rasomuro-op-desc">
+              <ul>
+                <li>Marcos rasomuro a medida</li>
+                <li>Minimal 45 mm para placa de yeso de 12 o 15 mm</li>
+                <li>Cabecero recto o escalonado</li>
+                <li>Puerta opcional a medida</li>
+              </ul>
+            </span>
+          </span>
+          <span class="rasomuro-op-arrow">→</span>
+        </button>
+
+        <button type="button" class="rasomuro-opcion" data-flujo="MRN">
+          <input type="radio" name="tipoRasomuro" value="MRN">
+          <span class="rasomuro-op-cod">MRN</span>
+          <span class="rasomuro-op-body">
+            <span class="rasomuro-op-name">Conjunto marco + puerta · anchos fijos</span>
+            <span class="rasomuro-op-desc">
+              <ul>
+                <li>Minimal 45 mm para placa de yeso de 12 mm</li>
+                <li>Alturas fijas de 2030 mm y 2110 mm</li>
+                <li>Alturas adaptables desde 2100 mm a 2700 mm</li>
+                <li>Cabecero recto</li>
+              </ul>
+            </span>
+          </span>
+          <span class="rasomuro-op-arrow">→</span>
+        </button>
+
+        <button type="button" class="rasomuro-opcion" data-flujo="MRK">
+          <input type="radio" name="tipoRasomuro" value="MRK">
+          <span class="rasomuro-op-cod">MRK</span>
+          <span class="rasomuro-op-body">
+            <span class="rasomuro-op-name">Marco rasomuro en KIT</span>
+            <span class="rasomuro-op-desc">
+              <ul>
+                <li>Marco rasomuro en kit</li>
+                <li>Minimal 45 mm para placa de yeso de 15 mm</li>
+                <li>Cabecero recto o escalonado</li>
+                <li>Sin puerta</li>
+              </ul>
+            </span>
+          </span>
+          <span class="rasomuro-op-arrow">→</span>
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Pie con hint y botón Siguiente -->
+    <div class="vista-c-footer">
+      <span class="vista-b-hint">Selecciona una opción para continuar</span>
+      <button type="button" class="btn-siguiente" id="btnSiguienteRasomuro" onclick="lanzarRasomuro()" disabled>
+        Siguiente →
+      </button>
+    </div>
+
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
        JAVASCRIPT
   ══════════════════════════════════════════════════════════════ -->
   <script>
@@ -690,14 +954,17 @@
       montada:    urlConfigurador('SistemaPA', 'PAMontada.html'),
       abatible:   urlConfigurador('SistemaPA', 'PAMontAbatible.html'),
       divisiones: urlConfigurador('SistemaPA', 'DivisionesPA.html'),
-      vitrinas:   urlConfigurador('Vitrinas',  'AdinorConfiguradorVitrinas.html')
-      // rasomuro: pendiente — añadir cuando el archivo exista
+      vitrinas:   urlConfigurador('Vitrinas',  'AdinorConfiguradorVitrinas.html'),
+      // Rasomuro — 3 destinos (HTML pendientes de crear)
+      rasomuroMRE: urlConfigurador('Rasomuro', 'RasomuroMRE.html'),
+      rasomuroMRN: urlConfigurador('Rasomuro', 'RasomuroMRN.html'),
+      rasomuroMRK: urlConfigurador('Rasomuro', 'RasomuroMRK.html')
     };
 
     // Asignar URLs dinámicas a los enlaces del menú principal
     document.getElementById('link-divisiones').href = URLs.divisiones;
     document.getElementById('link-vitrinas').href   = URLs.vitrinas;
-    // link-rasomuro queda con href="#" hasta que el configurador exista
+    // La tarjeta "04 · Rasomuro" abre la Vista C (sub-menú), no es enlace directo
 
 
     // ═══════════════════════════════════════════════════════════════
@@ -706,16 +973,29 @@
 
     const vistaA = document.getElementById('vistaA');
     const vistaB = document.getElementById('vistaB');
+    const vistaC = document.getElementById('vistaC');
+
+    function ocultarVistas() {
+      vistaA.classList.remove('active');
+      vistaB.classList.remove('active');
+      vistaC.classList.remove('active');
+    }
 
     function mostrarVistaA() {
-      vistaB.classList.remove('active');
+      ocultarVistas();
       vistaA.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
     function mostrarVistaB() {
-      vistaA.classList.remove('active');
+      ocultarVistas();
       vistaB.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function mostrarVistaC() {
+      ocultarVistas();
+      vistaC.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
 
@@ -814,6 +1094,63 @@
         // 1 (corredera), 3 (suelto-corredera), 4 (suelto-fijo) → PAMontada
         window.location.href = URLs.montada;
       }
+    }
+
+
+    // ═══════════════════════════════════════════════════════════════
+    // SUB-MENÚ RASOMURO (Vista C) — selección y lanzamiento
+    // ═══════════════════════════════════════════════════════════════
+
+    const opcionesRasomuro = document.querySelectorAll('.rasomuro-opcion');
+    const btnSiguienteRasomuro = document.getElementById('btnSiguienteRasomuro');
+
+    function abrirSubMenuRasomuro() {
+      mostrarVistaC();
+    }
+
+    opcionesRasomuro.forEach(op => {
+      op.addEventListener('click', () => {
+        opcionesRasomuro.forEach(o => o.classList.remove('selected'));
+        op.classList.add('selected');
+        const radio = op.querySelector('input[type="radio"]');
+        if (radio) radio.checked = true;
+        btnSiguienteRasomuro.disabled = false;
+      });
+    });
+
+    function limpiarSeleccionRasomuro() {
+      opcionesRasomuro.forEach(o => {
+        o.classList.remove('selected');
+        const r = o.querySelector('input[type="radio"]');
+        if (r) r.checked = false;
+      });
+      btnSiguienteRasomuro.disabled = true;
+    }
+
+    function volverAlInicioRasomuro() {
+      const haySeleccion = !!document.querySelector('.rasomuro-opcion.selected');
+      if (haySeleccion) {
+        confirmar('¿Volver al menú principal?\nSe perderá la selección actual.', () => {
+          limpiarSeleccionRasomuro();
+          mostrarVistaA();
+        });
+      } else {
+        mostrarVistaA();
+      }
+    }
+
+    function lanzarRasomuro() {
+      const seleccionada = document.querySelector('.rasomuro-opcion.selected');
+      if (!seleccionada) return;
+      const flujo = seleccionada.dataset.flujo;   // 'MRE' | 'MRN' | 'MRK'
+
+      const destino = {
+        MRE: URLs.rasomuroMRE,
+        MRN: URLs.rasomuroMRN,
+        MRK: URLs.rasomuroMRK
+      }[flujo];
+
+      if (destino) window.location.href = destino;
     }
 
 
