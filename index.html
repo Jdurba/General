@@ -461,7 +461,7 @@
       border-radius: 6px;
       overflow: hidden;
       background: #c5c4c1;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 3 / 3; 
     }
     .rasomuro-img-frame img {
       width: 100%;
@@ -516,12 +516,6 @@
       transform: translateX(6px);
       opacity: 1;
     }
-    .rasomuro-opcion.selected {
-      background: var(--card-bg-selected);
-    }
-    .rasomuro-opcion.selected .rasomuro-op-arrow {
-      opacity: 1;
-    }
     .rasomuro-opcion input[type="radio"] {
       position: absolute;
       opacity: 0;
@@ -573,17 +567,6 @@
     }
 
     /* Pie de la vista C (mismo patrón que vista B) */
-    .vista-c-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: clamp(0.8rem, 2vh, 1.5rem) var(--pad-x);
-      border-top: 1.5px solid rgba(0,0,0,0.45);
-      margin: 0 var(--pad-x);
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
     @media (max-width: 900px) {
       .vista-c-body {
         grid-template-columns: 1fr;
@@ -600,8 +583,6 @@
     @media (max-width: 600px) {
       .rasomuro-presenta { flex-direction: column; }
       .rasomuro-img-frame { width: 100%; }
-      .vista-c-footer { flex-direction: column; align-items: stretch; }
-      .vista-c-footer .btn-siguiente { width: 100%; }
     }
 
     /* ══════════════════════════════════════════
@@ -869,7 +850,7 @@
 
       <div class="rasomuro-opciones" role="radiogroup" aria-label="Tipo de Rasomuro">
 
-        <button type="button" class="rasomuro-opcion" data-flujo="MRE">
+        <button type="button" class="rasomuro-opcion" data-flujo="MRE" onclick="lanzarRasomuro('MRE')">
           <input type="radio" name="tipoRasomuro" value="MRE">
           <span class="rasomuro-op-cod">MRE</span>
           <span class="rasomuro-op-body">
@@ -886,7 +867,7 @@
           <span class="rasomuro-op-arrow">→</span>
         </button>
 
-        <button type="button" class="rasomuro-opcion" data-flujo="MRN">
+        <button type="button" class="rasomuro-opcion" data-flujo="MRN" onclick="lanzarRasomuro('MRN')">
           <input type="radio" name="tipoRasomuro" value="MRN">
           <span class="rasomuro-op-cod">MRN</span>
           <span class="rasomuro-op-body">
@@ -895,15 +876,15 @@
               <ul>
                 <li>Minimal 45 mm para placa de yeso de 12 mm</li>
                 <li>Alturas fijas de 2030 mm y 2110 mm</li>
-                <li>Alturas adaptables desde 2100 mm a 2700 mm</li>
-                <li>Cabecero recto</li>
+                <li>Alturas adaptables desde 2111 mm a 2700 mm</li>
+                <li>Cabecero recto o sin cabecero</li>
               </ul>
             </span>
           </span>
           <span class="rasomuro-op-arrow">→</span>
         </button>
 
-        <button type="button" class="rasomuro-opcion" data-flujo="MRK">
+        <button type="button" class="rasomuro-opcion" data-flujo="MRK" onclick="lanzarRasomuro('MRK')">
           <input type="radio" name="tipoRasomuro" value="MRK">
           <span class="rasomuro-op-cod">MRK</span>
           <span class="rasomuro-op-body">
@@ -922,14 +903,6 @@
 
       </div>
 
-    </div>
-
-    <!-- Pie con hint y botón Siguiente -->
-    <div class="vista-c-footer">
-      <span class="vista-b-hint">Selecciona una opción para continuar</span>
-      <button type="button" class="btn-siguiente" id="btnSiguienteRasomuro" onclick="lanzarRasomuro()" disabled>
-        Siguiente →
-      </button>
     </div>
 
   </div>
@@ -1101,51 +1074,24 @@
     // SUB-MENÚ RASOMURO (Vista C) — selección y lanzamiento
     // ═══════════════════════════════════════════════════════════════
 
-    const opcionesRasomuro = document.querySelectorAll('.rasomuro-opcion');
-    const btnSiguienteRasomuro = document.getElementById('btnSiguienteRasomuro');
-
     function abrirSubMenuRasomuro() {
       mostrarVistaC();
     }
 
-    opcionesRasomuro.forEach(op => {
-      op.addEventListener('click', () => {
-        opcionesRasomuro.forEach(o => o.classList.remove('selected'));
-        op.classList.add('selected');
-        const radio = op.querySelector('input[type="radio"]');
-        if (radio) radio.checked = true;
-        btnSiguienteRasomuro.disabled = false;
-      });
-    });
-
-    function limpiarSeleccionRasomuro() {
-      opcionesRasomuro.forEach(o => {
-        o.classList.remove('selected');
-        const r = o.querySelector('input[type="radio"]');
-        if (r) r.checked = false;
-      });
-      btnSiguienteRasomuro.disabled = true;
-    }
-
+    // Sin selección intermedia: el clic en la opción navega directo
+    // (al estilo del menú principal). Volver ya no arrastra estado.
     function volverAlInicioRasomuro() {
-      const haySeleccion = !!document.querySelector('.rasomuro-opcion.selected');
-      if (haySeleccion) {
-        confirmar('¿Volver al menú principal?\nSe perderá la selección actual.', () => {
-          limpiarSeleccionRasomuro();
-          mostrarVistaA();
-        });
-      } else {
-        mostrarVistaA();
-      }
+      mostrarVistaA();
     }
 
-    function lanzarRasomuro() {
-      const seleccionada = document.querySelector('.rasomuro-opcion.selected');
-      if (!seleccionada) return;
-      const flujo = seleccionada.dataset.flujo;   // 'MRE' | 'MRN' | 'MRK'
+    function lanzarRasomuro(flujo) {   // 'MRE' | 'MRN' | 'MRK'
+      // MRE aún no está publicado: aviso y no navegar.
+      if (flujo === 'MRE') {
+        aviso('⚠️ Rasomuro MRE (marcos a medida): en fase de desarrollo. No válido para pedidos.');
+        return;
+      }
 
       const destino = {
-        MRE: URLs.rasomuroMRE,
         MRN: URLs.rasomuroMRN,
         MRK: URLs.rasomuroMRK
       }[flujo];
@@ -1165,6 +1111,12 @@
       if (regresar === '1') {
         localStorage.removeItem('regresarASubMenuPA');
         abrirSubMenuPA();
+      }
+
+      const regresarR = localStorage.getItem('regresarASubMenuRasomuro');
+      if (regresarR === '1') {
+        localStorage.removeItem('regresarASubMenuRasomuro');
+        abrirSubMenuRasomuro();
       }
     });
 
