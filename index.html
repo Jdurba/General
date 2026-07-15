@@ -1085,13 +1085,9 @@
     }
 
     function lanzarRasomuro(flujo) {   // 'MRE' | 'MRN' | 'MRK'
-      // MRE aún no está publicado: aviso y no navegar.
-      if (flujo === 'MRE') {
-        aviso('⚠️ Rasomuro MRE (marcos a medida): en fase de desarrollo. No válido para pedidos.');
-        return;
-      }
-
+     
       const destino = {
+        MRE: URLs.rasomuroMRE,
         MRN: URLs.rasomuroMRN,
         MRK: URLs.rasomuroMRK
       }[flujo];
